@@ -1,0 +1,11 @@
+[user]
+	name = Sepehr Solouki
+	email = sepehr@ethicadata.com
+[core]
+	editor = vim
+[init]
+  defaultBranch = master
+# [diff]
+#   tool = nvimdiff
+# [merge]
+#   tool = nvimdiff

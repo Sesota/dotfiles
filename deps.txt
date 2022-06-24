@@ -1,0 +1,8 @@
+tmux
+git
+neovim
+ripgrep
+fd-find
+fzf
+packer
+
