@@ -1,4 +1,15 @@
 ----------- plugins
+_G.__luacache_config = {
+  chunks = {
+    enable = true,
+    path = vim.fn.stdpath('cache')..'/luacache_chunks',
+  },
+  modpaths = {
+    enable = true,
+    path = vim.fn.stdpath('cache')..'/luacache_modpaths',
+  }
+}
+require('impatient')
 
 -- install packer if not already installed
 local fn = vim.fn
@@ -11,6 +22,15 @@ end
 -- plugin list
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+  -- end)
+  use 'lewis6991/impatient.nvim'
+  use {
+    'lewis6991/gitsigns.nvim',
+    tag = 'release',
+    config = function()
+      require('gitsigns').setup()
+    end,
+  }
   use 'williamboman/nvim-lsp-installer'
   use 'neovim/nvim-lspconfig'
   use {
@@ -29,27 +49,23 @@ require('packer').startup(function(use)
     "goolord/alpha-nvim",
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
-  use {
-    'w0rp/ale',
-    ft = { 'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex' },
-    cmd = 'ALEEnable',
-    config = 'vim.cmd[[ALEEnable]]'
-  }
+  -- use {
+  --   'w0rp/ale',
+  --   ft = { 'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex' },
+  --   cmd = 'ALEEnable',
+  --   config = 'vim.cmd[[ALEEnable]]'
+  -- }
 
-  use {
-    'haorenW1025/completion-nvim',
-    opt = true,
-    requires = { { 'hrsh7th/vim-vsnip', opt = true }, { 'hrsh7th/vim-vsnip-integ', opt = true } }
-  }
+  -- use {
+  --   'haorenW1025/completion-nvim',
+  --   opt = true,
+  --   requires = { { 'hrsh7th/vim-vsnip', opt = true }, { 'hrsh7th/vim-vsnip-integ', opt = true } }
+  -- }
 
-  use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
+  -- use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
 
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate && TSInstall python' }
+  use { 'nvim-treesitter/nvim-treesitter' }
 
-  use {
-    'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' },
-    config = function() require('gitsigns').setup() end
-  }
   use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' }
 
   use 'navarasu/onedark.nvim'
@@ -66,10 +82,7 @@ require('packer').startup(function(use)
     requires = { 'nvim-lua/plenary.nvim', }
   }
   use 'nvim-telescope/telescope-project.nvim'
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
+  use { 'nvim-lualine/lualine.nvim' }
   use {
     "folke/which-key.nvim",
     config = function()
@@ -89,10 +102,6 @@ require('packer').startup(function(use)
     end
   }
   use { 'Shatur/neovim-session-manager', requires = { 'nvim-lua/plenary.nvim' } }
-
-  if packer_bootstrap then
-    require('packer').sync()
-  end
 end)
 
 -- plugin setup
@@ -132,7 +141,7 @@ require('session_manager').setup({
 
 -- LSP
 wk.register({
-  ['de'] = { vim.diagnostic.open_float, "Diag hover" },
+  ['dh'] = { vim.diagnostic.open_float, "Diag hover" },
   ['dl'] = { vim.diagnostic.goto_prev, "Last Diag message" },
   ['dq'] = { vim.diagnostic.setloclist, "Diag messages" },
 }, { prefix = '<leader>' })
@@ -151,7 +160,7 @@ local on_attach = function(client, bufnr)
     ['<leader>rn'] = { vim.lsp.buf.rename, "Rename" },
     ['<leader>ca'] = { vim.lsp.buf.code_action, "Code Action" },
     ['gr'] = { vim.lsp.buf.references, "References" },
-    ['<leader>f'] = { vim.lsp.buf.format, "Format Document" },
+    ['<leader>f'] = { '<cmd>lua vim.lsp.buf.format({ async=true, timeout_ms=5000 })<CR>', "Format Document" },
   }, { buffer = bufnr })
 end
 
@@ -165,8 +174,23 @@ require('nvim-lsp-installer').setup({
     }
   }
 })
+
+local lsp_util = require('lspconfig/util')
+
 require('lspconfig')['pyright'].setup {
   on_attach = on_attach,
+  root_dir = function(fname)
+    return lsp_util.root_pattern(".git", "pyproject.toml", "requirements.txt")(fname) or lsp_util.path.dirname(fname)
+  end,
+  -- before_init = function(_, config)
+  --   local path
+  --   if vim.env.VIRTUAL_ENV then
+  --       path = lsp_util.path.join(vim.env.VIRTUAL_ENV, "bin", "python3")
+  --   else
+  --       path = lsp_util.find_cmd("python3", ".venv/bin", config.root_dir)
+  --   end
+  --   config.settings.python.pythonPath = path
+  -- end,
 }
 require('lspconfig')['sumneko_lua'].setup {
   on_attach = on_attach,
@@ -180,7 +204,7 @@ require('lspconfig')['sumneko_lua'].setup {
 }
 require('null-ls').setup {
   sources = {
-    require('null-ls').builtins.diagnostics.pyproject_flake8,
+    require('null-ls').builtins.diagnostics.flake8,
     require('null-ls').builtins.formatting.black,
   }
 }
@@ -289,7 +313,7 @@ wk.register({
 
 require('onedark').setup {
   style = 'warmer',
-  transparent = false,
+  transparent = true,
   term_colors = true,
   ending_tildes = false,
   cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
@@ -318,10 +342,9 @@ require('lualine').setup {
     theme = 'onedark',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = {},
     always_divide_middle = true,
     globalstatus = false,
-    disabled_filetypes = { 'NvimTree' },
+    disabled_filetypes = { 'NvimTree', 'gitcommit' },
   },
   sections = {
     lualine_a = { 'mode' },
@@ -367,7 +390,6 @@ db.section.buttons.opts.hl = "Keyword"
 
 db.opts.opts.noautocmd = false
 require('alpha').setup(db.opts)
-require('alpha').start()
 
 local function get_listed_buffers()
   local buffers = {}
@@ -381,6 +403,15 @@ local function get_listed_buffers()
 
   return buffers
 end
+
+local alpha_start = function()
+  local buffers = get_listed_buffers()
+  local len = #buffers
+  if len == 0 then
+    require('alpha').start()
+  end
+end
+alpha_start()
 
 vim.api.nvim_create_augroup('alpha_on_empty', { clear = true })
 vim.api.nvim_create_autocmd('User', {

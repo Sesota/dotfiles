@@ -2,7 +2,7 @@
 	name = Sepehr Solouki
 	email = sepehr@ethicadata.com
 [core]
-	editor = vim
+	editor = nvim
 [init]
   defaultBranch = master
 # [diff]
