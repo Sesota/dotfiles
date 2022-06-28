@@ -2,11 +2,11 @@
 _G.__luacache_config = {
   chunks = {
     enable = true,
-    path = vim.fn.stdpath('cache')..'/luacache_chunks',
+    path = vim.fn.stdpath('cache') .. '/luacache_chunks',
   },
   modpaths = {
     enable = true,
-    path = vim.fn.stdpath('cache')..'/luacache_modpaths',
+    path = vim.fn.stdpath('cache') .. '/luacache_modpaths',
   }
 }
 require('impatient')
@@ -19,20 +19,22 @@ if fn.empty(fn.glob(install_path)) > 0 then
     install_path })
 end
 
--- plugin list
 require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
-  -- end)
-  use 'lewis6991/impatient.nvim'
+  use 'wbthomason/packer.nvim' --package manager
+  use 'lewis6991/impatient.nvim' -- plugin optimization
+  use 'mfussenegger/nvim-dap' -- debugger
+  use 'mfussenegger/nvim-dap-python'
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+  use 'theHamsta/nvim-dap-virtual-text'
   use {
-    'lewis6991/gitsigns.nvim',
+    'lewis6991/gitsigns.nvim', -- git gutter
     tag = 'release',
     config = function()
       require('gitsigns').setup()
     end,
   }
-  use 'williamboman/nvim-lsp-installer'
-  use 'neovim/nvim-lspconfig'
+  use 'williamboman/nvim-lsp-installer' -- lsp ls installer
+  use 'neovim/nvim-lspconfig' -- lsp
   use {
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
@@ -43,48 +45,40 @@ require('packer').startup(function(use)
   use 'tpope/vim-surround'
   use 'easymotion/vim-easymotion'
   use 'tomtom/tcomment_vim'
-  use 'github/copilot.vim'
-  use 'famiu/bufdelete.nvim'
   use {
-    "goolord/alpha-nvim",
+    'github/copilot.vim',
+    config = function()
+      vim.cmd 'imap <silent><script><expr> <C-L> copilot#Accept()'
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_tab_fallback = ""
+    end,
+  }
+  use 'famiu/bufdelete.nvim' -- a minimal plugin to provide a better buffer delete command
+  use {
+    "goolord/alpha-nvim", -- greeter
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
-  -- use {
-  --   'w0rp/ale',
-  --   ft = { 'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex' },
-  --   cmd = 'ALEEnable',
-  --   config = 'vim.cmd[[ALEEnable]]'
-  -- }
 
-  -- use {
-  --   'haorenW1025/completion-nvim',
-  --   opt = true,
-  --   requires = { { 'hrsh7th/vim-vsnip', opt = true }, { 'hrsh7th/vim-vsnip-integ', opt = true } }
-  -- }
+  use { 'nvim-treesitter/nvim-treesitter' } -- language parser
 
-  -- use { 'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview' }
+  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' } -- nice tabs instead of buffers
 
-  use { 'nvim-treesitter/nvim-treesitter' }
-
-  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' }
-
-  use 'navarasu/onedark.nvim'
+  use 'navarasu/onedark.nvim' -- theme manager
   use {
-    'kyazdani42/nvim-tree.lua',
+    'kyazdani42/nvim-tree.lua', -- file manager
     requires = {
       'kyazdani42/nvim-web-devicons',
     },
     tag = 'nightly'
   }
-
   use {
-    'nvim-telescope/telescope.nvim',
+    'nvim-telescope/telescope.nvim', -- like fzf.vim but better
     requires = { 'nvim-lua/plenary.nvim', }
   }
-  use 'nvim-telescope/telescope-project.nvim'
-  use { 'nvim-lualine/lualine.nvim' }
+  use 'nvim-telescope/telescope-project.nvim' -- project manager plugin for telescope
+  use { 'nvim-lualine/lualine.nvim' } -- statusbar
   use {
-    "folke/which-key.nvim",
+    "folke/which-key.nvim", -- keybindings manager
     config = function()
       require("which-key").setup {}
     end
@@ -101,7 +95,16 @@ require('packer').startup(function(use)
       }
     end
   }
-  use { 'Shatur/neovim-session-manager', requires = { 'nvim-lua/plenary.nvim' } }
+  use { 'Shatur/neovim-session-manager', requires = { 'nvim-lua/plenary.nvim' } } -- to autoload last session
+
+  -- cmp
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-vsnip'
+  use 'hrsh7th/vim-vsnip'
 end)
 
 -- plugin setup
@@ -115,6 +118,13 @@ wk.register({
   R = { '<cmd>luafile ~/.config/nvim/init.lua<CR>', "Reload init.lua" },
   ['<C-s>'] = { '<cmd>w<CR>', "Save buffer" }
 })
+wk.register({
+  ['<A-,>'] = { '<C-x><C-o>', "Trigger Autocomplete" }
+}, { mode = 'i', nowait = true })
+
+vim.cmd 'noremap! <C-BS> <C-w>'
+vim.cmd 'noremap! <C-h> <C-w>'
+vim.keymap.set('i', '<ESC>', '<ESC><ESC>', { noremap = true })
 
 wk.register({
   n = { ':nohlsearch<CR>', "nohlsearch" },
@@ -122,31 +132,177 @@ wk.register({
   ['<leader>-'] = { ':s/\\~\\~//g <bar> :noh<cr>' }
 }, { prefix = "<leader>" })
 
+-- dap
+local dap = require('dap')
+local dap_widgets = require('dap.ui.widgets')
+vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+
+wk.register({
+  ['<S-J>'] = { dap.step_over, 'Step Over' },
+  ['<S-L>'] = { dap.step_into, 'Step Into' },
+  ['<S-H>'] = { dap.step_out, 'Step Out' },
+})
+wk.register({
+  ['c'] = { dap.continue, 'Continue' },
+  ['u'] = { dap.up, 'Up' },
+  ['d'] = { dap.down, 'Down' },
+  ['t'] = { dap.terminate, 'Terminate' },
+  ['h'] = { dap_widgets.hover, 'Hover' },
+  ['b'] = { dap.toggle_breakpoint, 'Toggle Breakpoint' },
+  ['\\'] = { dap.repl.toggle, 'Repl' },
+  ['r'] = { dap.run_last, 'Run Last' },
+}, { prefix = '<leader>d' })
+
+-- dap-py
+local dapy = require('dap-python')
+dapy.setup()
+dap.configurations.python = {
+  {
+    name = 'Python 3',
+    type = 'python',
+    request = 'launch',
+    program = '${file}',
+  }
+}
+require('dap.ext.vscode').load_launchjs()
+
+wk.register({
+  ['pm'] = { dapy.test_method, "Test above method" },
+  ['pc'] = { dapy.test_class, "Test above class" },
+}, { prefix = '<leader>d' })
+
+wk.register({
+  ['ps'] = { dapy.test_selection, "Test selection" },
+}, { prefix = '<leader>d', mode = 'v' })
+
+-- dap-ui
+local dapui = require("dapui")
+dapui.setup({
+  layouts = {
+    {
+      elements = {
+        { id = "scopes", size = 0.25 },
+        "breakpoints",
+        "stacks",
+      },
+      size = 40,
+      position = "right",
+    },
+    {
+      elements = {
+        "repl",
+      },
+      size = 0.25,
+      position = "bottom",
+    }
+  },
+  floating = {
+    max_height = nil, -- These can be integers or a float between 0 and 1.
+    max_width = nil, -- Floats will be treated as percentage of your screen.
+    border = "single", -- Border style. Can be "single", "double" or "rounded"
+    mappings = {
+      close = { "q", "<Esc>" },
+    },
+  },
+  windows = { indent = 1 },
+  render = {
+    max_type_length = nil, -- Can be integer or nil.
+  }
+})
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+wk.register({
+  e = { dapui.eval, "Evaluate Expression" },
+}, { prefix = '<leader>d', mode = 'v' })
+
+-- dap-virtualtext
+require('nvim-dap-virtual-text').setup()
 
 -- session-manager
 local Path = require('plenary.path')
 require('session_manager').setup({
-  sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'), -- The directory where the session files will be saved.
-  path_replacer = '__', -- The character to which the path separator will be replaced for session files.
-  colon_replacer = '++', -- The character to which the colon symbol will be replaced for session files.
-  autoload_mode = require('session_manager.config').AutoloadMode.LastSession, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-  autosave_last_session = true, -- Automatically save last session on exit and on session switch.
-  autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-  autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
+  sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
+  path_replacer = '__',
+  colon_replacer = '++',
+  -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
+  autoload_mode = require('session_manager.config').AutoloadMode.LastSession,
+  autosave_last_session = true,
+  autosave_ignore_not_normal = true,
+  autosave_ignore_filetypes = {
     'gitcommit',
   },
-  autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-  max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+  autosave_only_in_session = false,
+  max_path_length = 80,
 })
+
+-- CMP
+vim.opt.completeopt = 'menu,menuone,noselect'
+local cmp = require 'cmp'
+cmp.setup({
+  snippet = { expand = function(args) vim.fn["vsnip#anonymous"](args.body) end },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-j>'] = cmp.mapping.select_next_item(),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<Esc>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() == 1 then
+        cmp.confirm({ select = true })
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+  }),
+
+  sources = { { name = "nvim_lsp" }, { name = "nvim_lua" }, { name = "buffer" }, { name = "path" }, { name = 'emoji' } },
+  completion = {
+    autocomplete = false
+  }
+})
+
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'cmp_git' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- LSP
 wk.register({
-  ['dh'] = { vim.diagnostic.open_float, "Diag hover" },
-  ['dl'] = { vim.diagnostic.goto_prev, "Last Diag message" },
-  ['dq'] = { vim.diagnostic.setloclist, "Diag messages" },
+  ['lh'] = { vim.diagnostic.open_float, "LSP hover" },
+  ['ll'] = { vim.diagnostic.goto_prev, "Last LSP message" },
+  ['lq'] = { vim.diagnostic.setloclist, "LSP messages" },
 }, { prefix = '<leader>' })
 
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -182,38 +338,47 @@ require('lspconfig')['pyright'].setup {
   root_dir = function(fname)
     return lsp_util.root_pattern(".git", "pyproject.toml", "requirements.txt")(fname) or lsp_util.path.dirname(fname)
   end,
-  -- before_init = function(_, config)
-  --   local path
-  --   if vim.env.VIRTUAL_ENV then
-  --       path = lsp_util.path.join(vim.env.VIRTUAL_ENV, "bin", "python3")
-  --   else
-  --       path = lsp_util.find_cmd("python3", ".venv/bin", config.root_dir)
-  --   end
-  --   config.settings.python.pythonPath = path
-  -- end,
+  before_init = function(_, config)
+    local path
+    if vim.env.VIRTUAL_ENV then
+      path = lsp_util.path.join(vim.env.VIRTUAL_ENV, "bin", "python3")
+    else
+      path = lsp_util.find_cmd("python3", ".venv/bin", config.root_dir)
+    end
+    vim.api.nvim_echo('python3: ' .. path)
+    config.settings.python.pythonPath = path
+  end,
+  capabilities = cmp_capabilities,
 }
 require('lspconfig')['sumneko_lua'].setup {
   on_attach = on_attach,
   settings = {
     Lua = {
       diagnostics = {
-        globals = { 'vim' }
+        globals = { 'vim', 'packer_bootstrap' }
       }
     }
-  }
+  },
+  capabilities = cmp_capabilities,
 }
-require('null-ls').setup {
-  sources = {
-    require('null-ls').builtins.diagnostics.flake8,
-    require('null-ls').builtins.formatting.black,
-  }
+
+-- null-ls
+local null_ls = require('null-ls')
+local sources = {
+  null_ls.builtins.diagnostics.flake8.with({
+    prefer_local = "./.venv/bin",
+  }),
+  null_ls.builtins.formatting.black.with({
+    prefer_local = "./.venv/bin",
+  }),
 }
+null_ls.setup({ sources = sources })
 
 -- telescope
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { "%.git/.*" },
+    file_ignore_patterns = { "%.git/.*", "%.venv/.*" },
     vimgrep_arguments = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column",
       "--smart-case", "--hidden", "--ignore" }
   },
@@ -273,6 +438,7 @@ require("nvim-tree").setup({
     dotfiles = false,
     custom = {
       "^\\.git",
+      "^\\.venv",
     },
   },
 })
@@ -316,7 +482,7 @@ require('onedark').setup {
   transparent = true,
   term_colors = true,
   ending_tildes = false,
-  cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
+  cmp_itemkind_reverse = false,
   code_style = {
     comments = 'italic',
     keywords = 'none',
@@ -324,8 +490,6 @@ require('onedark').setup {
     strings = 'none',
     variables = 'none'
   },
-
-  -- Plugins Config --
   diagnostics = {
     darker = true,
     undercurl = true,
@@ -335,22 +499,16 @@ require('onedark').setup {
 require('onedark').load()
 
 -- Lualine
-
 require('lualine').setup {
   options = {
-    icons_enabled = true,
     theme = 'onedark',
-    component_separators = { left = '', right = '' },
-    section_separators = { left = '', right = '' },
-    always_divide_middle = true,
-    globalstatus = false,
     disabled_filetypes = { 'NvimTree', 'gitcommit' },
   },
   sections = {
     lualine_a = { 'mode' },
     lualine_b = { 'branch', 'diff', 'diagnostics' },
     lualine_c = { 'filename' },
-    lualine_x = { 'encoding', 'fileformat', 'filetype' },
+    lualine_x = { dap.status, 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
     lualine_z = { 'location' }
   },
@@ -362,8 +520,6 @@ require('lualine').setup {
     lualine_y = {},
     lualine_z = {}
   },
-  tabline = {},
-  extensions = {}
 }
 
 -- alpha
@@ -381,7 +537,7 @@ db.section.buttons.val = {
   db.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
   db.button("p", "  Find project", ":Telescope projects <CR>"),
   db.button("r", "  Recently used files", ":Telescope oldfiles <CR>"),
-  db.button("<leader>fg", "  Find text", ":Telescope live_grep <CR>"),
+  db.button("<leader>tf", "  Find text", ":Telescope live_grep <CR>"),
   db.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
   db.button("q", "  Quit Neovim", ":qa<CR>"),
 }
