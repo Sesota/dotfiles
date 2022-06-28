@@ -28,6 +28,7 @@
 - vim-surround how to wrap?
 - https://toroid.org/modern-neovim
 - other vscode functionalities to port (to avoid consuming time when doing tasks)
+  - markdown
 - Install script
   - README curl install.sh
   - Install all deps (build the ones necessary)
@@ -40,5 +41,5 @@
 
 - breadcrumbs
 - git thingies
-- lualine alt
 - tmux italic alt
+

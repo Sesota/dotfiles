@@ -291,7 +291,7 @@ require("bufferline").setup {
   options = {
     mode = "buffers",
     diagnostics = "nvim_lsp",
-    separator_style = "slant",
+    separator_style = "thin",
     offsets = {
       {
         filetype = "NvimTree",
