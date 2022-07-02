@@ -6,6 +6,19 @@
 
 - run `./install.sh`
 
+### Install tmux
+#### Build prerequisites
+- ubuntu
+  `sudo apt-get install libevent-dev ncurses-dev build-essential bison pkg-config`
+- RHEL
+  `sudo yum -y install libevent-devel ncurses-devel gcc make bison pkg-config`
+
+#### Building
+- `git clone https://github.com/tmux/tmux.git`
+- `cd tmux && sh autogen.sh`
+- `./configure`
+- `make && sudo make install`
+
 ### Install Neovim
 
 #### Build prerequisites

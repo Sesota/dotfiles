@@ -164,7 +164,7 @@ dap.configurations.python = {
     program = '${file}',
   }
 }
-require('dap.ext.vscode').load_launchjs()
+-- require('dap.ext.vscode').load_launchjs()
 
 wk.register({
   ['pm'] = { dapy.test_method, "Test above method" },
@@ -479,7 +479,7 @@ wk.register({
 
 require('onedark').setup {
   style = 'warmer',
-  transparent = true,
+  transparent = false,
   term_colors = true,
   ending_tildes = false,
   cmp_itemkind_reverse = false,
