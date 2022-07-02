@@ -1,7 +1,10 @@
+# RC variables
+DOTFILESDIR=$HOME/dotfiles-sepehr
+
 # Check if zplug is installed
-if [[ ! -d ~/.zplug ]]; then
-  git clone https://github.com/zplug/zplug ~/.zplug
-  source ~/.zplug/init.zsh && zplug update --self
+if [[ ! -d $HOME/.zplug ]]; then
+  git clone https://github.com/zplug/zplug $HOME/.zplug
+  source $HOME/.zplug/init.zsh && zplug update --self
 fi
 
 # ZPlug
@@ -11,6 +14,7 @@ zplug "Jxck/dotfiles", as:command, use:"bin/{histuniq,color}"
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/z", from:oh-my-zsh
 zplug "plugins/zsh-autosuggestions", from:oh-my-zsh
+zplug "plugins/tmux", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
 zplug "junegunn/fzf", use:"shell/{key-bindings,completion}.zsh"
@@ -28,7 +32,7 @@ zplug load
 # -----------------------------------------------------------------------------
 
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
+HISTFILE=$HOME/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 bindkey -v
@@ -41,6 +45,13 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+
+# -----------------------------------------------------------------------------
+# Tmux
+
+ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_CONFIG=$DOTFILESDIR/.tmux.conf
+ZSH_TMUX_DEFAULT_SESSION_NAME=sesota
 
 # -----------------------------------------------------------------------------
 
@@ -73,7 +84,8 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 alias ssh="TERM=xterm-256color ssh"
 alias ll="ls -lha"
 alias v="nvim"
-alias confedit="nvim ~/dotfiles"
+alias confedit="nvim $DOTFILESDIR"
+# alias tmux="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
 
 act () {
   source ".venv/bin/activate"
@@ -89,8 +101,8 @@ export EDITOR='nvim'
 
 # -----------------------------------------------------------------------------
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f ~/.zsh_theme.sh ] && source ~/.zsh_theme.sh
+[ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
+[ -f $DOTFILESDIR/.zsh_theme.sh ] && source $DOTFILESDIR/.zsh_theme.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

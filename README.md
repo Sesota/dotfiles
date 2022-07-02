@@ -38,6 +38,7 @@
 
 ### `General`
 
+- ! unify the custom-dotfiles/.zshrc and .zshrc
 - vim-surround how to wrap?
 - https://toroid.org/modern-neovim
 - other vscode functionalities to port (to avoid consuming time when doing tasks)
