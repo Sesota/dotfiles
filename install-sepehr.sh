@@ -4,7 +4,6 @@ set -e
 
 dotfiles=(
   .config/nvim/init.lua
-  .zshrc-sepehr
 )
 
 # Symlink all dotfiles listed above to the right spot
