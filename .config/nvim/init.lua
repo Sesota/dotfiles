@@ -119,7 +119,7 @@ wk.register({
   ['<C-s>'] = { '<cmd>w<CR>', "Save buffer" }
 })
 wk.register({
-  ['<A-,>'] = { '<C-x><C-o>', "Trigger Autocomplete" }
+  ['<A-n>'] = { '<C-x><C-o>', "Trigger Autocomplete" }
 }, { mode = 'i', nowait = true })
 
 vim.cmd 'noremap! <C-BS> <C-w>'
