@@ -73,8 +73,8 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 alias ssh="TERM=xterm-256color ssh"
 alias ll="ls -lha"
 alias v="nvim"
-alias confedit="nvim ~/dotfiles"
-alias tmux="tmux -L sepehr -f ~/dotfiles/.tmux.conf"
+alias confedit="nvim ~/dotfiles-sepehr"
+alias tmux="tmux -L sepehr -f ~/dotfiles-sepehr/.tmux.conf"
 
 act () {
   source ".venv/bin/activate"
@@ -91,7 +91,7 @@ export EDITOR='nvim'
 # -----------------------------------------------------------------------------
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f ~/dotfiles/.zsh_theme.sh ] && source ~/dotfiles/.zsh_theme.sh
+[ -f ~/dotfiles-sepehr/.zsh_theme.sh ] && source ~/dotfiles-sepehr/.zsh_theme.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
