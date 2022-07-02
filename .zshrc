@@ -65,6 +65,10 @@ DISABLE_AUTO_UPDATE=true
 ZSH_THEME='af-magic'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
+plugins=(
+  git
+  tmux
+)
 source $ZSH/oh-my-zsh.sh
 
 autoload -U zmv
@@ -85,7 +89,7 @@ alias ssh="TERM=xterm-256color ssh"
 alias ll="ls -lha"
 alias v="nvim"
 alias confedit="nvim $DOTFILESDIR"
-# alias tmux="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
+alias tm="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
 
 act () {
   source ".venv/bin/activate"
