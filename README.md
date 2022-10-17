@@ -9,7 +9,7 @@
 ### Install tmux
 #### Build prerequisites
 - ubuntu
-  `sudo apt-get install libevent-dev ncurses-dev build-essential bison pkg-config`
+  `sudo apt-get install libevent-dev ncurses-dev build-essential bison pkg-config automake`
 - RHEL
   `sudo yum -y install libevent-devel ncurses-devel gcc make bison pkg-config`
 
