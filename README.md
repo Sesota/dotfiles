@@ -2,6 +2,8 @@
 
 ## Install
 
+`git clone https://github.com/Sesota/dotfiles.git ~/dotfiles-sepehr`
+
 ### Quick install
 
 - run `./install.sh`
