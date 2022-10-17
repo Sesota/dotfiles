@@ -16,9 +16,7 @@ zplug "plugins/z", from:oh-my-zsh
 zplug "plugins/zsh-autosuggestions", from:oh-my-zsh
 zplug "plugins/tmux", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
 zplug "junegunn/fzf", use:"shell/{key-bindings,completion}.zsh"
-zplug "peco/peco", as:command, from:gh-r
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -111,3 +109,5 @@ export EDITOR='nvim'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
