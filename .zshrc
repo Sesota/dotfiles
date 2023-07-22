@@ -88,10 +88,47 @@ alias ll="ls -lha"
 alias v="nvim"
 alias confedit="nvim $DOTFILESDIR"
 alias tm="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
+alias antlr4="antlr4-7"
+alias antlr4-7="java -jar /usr/local/lib/antlr-4.7.2-complete.jar"
+alias antlr4-12="java -jar /usr/local/lib/antlr-4.12.0-complete.jar"
+alias grun="java org.antlr.v4.gui.TestRig"
+export CLASSPATH=".:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH"
 
 act () {
   source ".venv/bin/activate"
   export $(grep -v '^#' ${1:-.env} | xargs -d '\n')
+}
+
+# Auto active virtual environment with name of .venv
+function cd() {
+  builtin cd "$@"
+
+  if [[ -z "$VIRTUAL_ENV" ]] ; then
+    ## If env folder is found then activate the vitualenv
+      if [[ -d ./.venv ]] ; then
+        source ./.venv/bin/activate
+      fi
+      if [[ -f ./webserver.sepehr.env ]]; then
+        export $(cut -d= -f1 <(cat webserver.sepehr.env | grep -Ev "^$|^#"))
+      fi
+      if [[ -f ./.env ]]; then
+        export $(cut -d= -f1 <(cat .env | grep -Ev "^$|^#"))
+      fi
+  else
+    ## check the current folder belong to earlier VIRTUAL_ENV folder
+    # if yes then do nothing
+    # else deactivate
+      parentdir="$(dirname "$VIRTUAL_ENV")"
+      if [[ "$PWD"/ != "$parentdir"/* ]] ; then
+        deactivate
+        if [[ -f $parentdir/.env ]]; then
+          unset $(cut -d= -f1 < $parentdir/.env)
+        fi
+        if [[ -f $parentdir/webserver.sepehr.env ]]; then
+          unset $(cut -d= -f1 < $parentdir/webserver.sepehr.env)
+        fi
+      fi
+  fi
 }
 
 # -----------------------------------------------------------------------------
@@ -104,7 +141,7 @@ export EDITOR='nvim'
 # -----------------------------------------------------------------------------
 
 [ -f $HOME/.fzf.zsh ] && source $HOME/.fzf.zsh
-[ -f $DOTFILESDIR/.zsh_theme.sh ] && source $DOTFILESDIR/.zsh_theme.sh
+# [ -f $DOTFILESDIR/.zsh_theme.sh ] && source $DOTFILESDIR/.zsh_theme.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

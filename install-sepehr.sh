@@ -3,7 +3,8 @@
 set -e
 
 dotfiles=(
-  .config/nvim/init.lua
+  .config/nvim/init.lua,
+  .tmux.conf
 )
 
 # Symlink all dotfiles listed above to the right spot

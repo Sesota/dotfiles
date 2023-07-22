@@ -51,7 +51,7 @@
   - clone the dotfiles
   - make backup of existing dotfiles
   - replace them all
-  - install all deps plugins. Init nvim, zsh, fzf, etc.
+  - install all deps plugins. Init nvim, zsh, fzf, **RIPGREP**, fd, etc.
 
 ### `init.lua`
 

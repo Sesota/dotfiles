@@ -22,13 +22,14 @@ end
 require('packer').startup(function(use)
   use 'wbthomason/packer.nvim' --package manager
   use 'lewis6991/impatient.nvim' -- plugin optimization
+  use "folke/neodev.nvim"
   use 'mfussenegger/nvim-dap' -- debugger
   use 'mfussenegger/nvim-dap-python'
   use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
   use 'theHamsta/nvim-dap-virtual-text'
   use {
     'lewis6991/gitsigns.nvim', -- git gutter
-    tag = 'release',
+    -- tag = 'release',
     config = function()
       require('gitsigns').setup()
     end,
@@ -45,14 +46,16 @@ require('packer').startup(function(use)
   use 'tpope/vim-surround'
   use 'easymotion/vim-easymotion'
   use 'tomtom/tcomment_vim'
-  use {
-    'github/copilot.vim',
-    config = function()
-      vim.cmd 'imap <silent><script><expr> <C-L> copilot#Accept()'
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_tab_fallback = ""
-    end,
-  }
+  -- use {
+  --   'github/copilot.vim',
+  --   config = function()
+  --     vim.cmd 'imap <silent><script><expr> <C-L> copilot#Accept()'
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_tab_fallback = ""
+  --     vim.g["copilot_filetypes"] = { gitcommit = true }  -- TODO fix; broken for now. 
+  --     vim.g.copilot_proxy = 'localhost:8118'
+  --   end,
+  -- }
   use 'famiu/bufdelete.nvim' -- a minimal plugin to provide a better buffer delete command
   use {
     "goolord/alpha-nvim", -- greeter
@@ -63,7 +66,8 @@ require('packer').startup(function(use)
 
   use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' } -- nice tabs instead of buffers
 
-  use 'navarasu/onedark.nvim' -- theme manager
+  -- use 'navarasu/onedark.nvim' -- theme manager
+  use "olimorris/onedarkpro.nvim"
   use {
     'kyazdani42/nvim-tree.lua', -- file manager
     requires = {
@@ -85,7 +89,7 @@ require('packer').startup(function(use)
   }
   use {
     "akinsho/toggleterm.nvim",
-    tag = 'v1.*',
+    tag = '*',
     config = function()
       require("toggleterm").setup {
         open_mapping = [[<C-\>]],
@@ -95,7 +99,6 @@ require('packer').startup(function(use)
       }
     end
   }
-  use { 'Shatur/neovim-session-manager', requires = { 'nvim-lua/plenary.nvim' } } -- to autoload last session
 
   -- cmp
   use 'hrsh7th/cmp-nvim-lsp'
@@ -118,9 +121,9 @@ wk.register({
   R = { '<cmd>luafile ~/.config/nvim/init.lua<CR>', "Reload init.lua" },
   ['<C-s>'] = { '<cmd>w<CR>', "Save buffer" }
 })
-wk.register({
-  ['<A-n>'] = { '<C-x><C-o>', "Trigger Autocomplete" }
-}, { mode = 'i', nowait = true })
+-- wk.register({
+--   ['<A-n>'] = { '<C-x><C-o>', "Trigger Autocomplete" }
+-- }, { mode = 'i', nowait = true })
 
 vim.cmd 'noremap! <C-BS> <C-w>'
 vim.cmd 'noremap! <C-h> <C-w>'
@@ -132,10 +135,14 @@ wk.register({
   ['<leader>-'] = { ':s/\\~\\~//g <bar> :noh<cr>' }
 }, { prefix = "<leader>" })
 
+-- neodev
+
+require('neodev').setup({})
+
 -- dap
 local dap = require('dap')
 local dap_widgets = require('dap.ui.widgets')
-vim.fn.sign_define('DapBreakpoint', { text = '🛑', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpoint', { text = '⭕️', texthl = '', linehl = '', numhl = '' })
 
 wk.register({
   ['<S-J>'] = { dap.step_over, 'Step Over' },
@@ -162,7 +169,23 @@ dap.configurations.python = {
     type = 'python',
     request = 'launch',
     program = '${file}',
-  }
+    justMyCode = false,
+  },
+  {
+    name = 'Django',
+    type = 'python',
+    request = 'launch',
+    program = vim.fn.getcwd() .. '/manage.py', -- NOTE: Adapt path to manage.py as needed
+    args = { 'runserver', '--noreload' },
+    justMyCode = false,
+  },
+  {
+    name='Django (Attach)',
+    type='python',
+    request='attach',
+    port=5000,
+    justMyCode = false,
+  },
 }
 -- require('dap.ext.vscode').load_launchjs()
 
@@ -188,13 +211,13 @@ dapui.setup({
       size = 40,
       position = "right",
     },
-    {
-      elements = {
-        "repl",
-      },
-      size = 0.25,
-      position = "bottom",
-    }
+    -- {
+    --   elements = {
+    --     "repl",
+    --   },
+    --   size = 0.25,
+    --   position = "bottom",
+    -- }
   },
   floating = {
     max_height = nil, -- These can be integers or a float between 0 and 1.
@@ -225,25 +248,42 @@ wk.register({
 -- dap-virtualtext
 require('nvim-dap-virtual-text').setup()
 
--- session-manager
-local Path = require('plenary.path')
-require('session_manager').setup({
-  sessions_dir = Path:new(vim.fn.stdpath('data'), 'sessions'),
-  path_replacer = '__',
-  colon_replacer = '++',
-  -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-  autoload_mode = require('session_manager.config').AutoloadMode.LastSession,
-  autosave_last_session = true,
-  autosave_ignore_not_normal = true,
-  autosave_ignore_filetypes = {
-    'gitcommit',
+-- treesitter
+require 'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "python", "lua", "yaml", "json" },
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  highlight = {
+    enable = true,
+
+    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
+    -- disable = function(lang, buf)
+    --     local max_filesize = 100 * 1024 -- 100 KB
+    --     local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+    --     if ok and stats and stats.size > max_filesize then
+    --         return true
+    --     end
+    -- end,
+
+    additional_vim_regex_highlighting = false,
   },
-  autosave_only_in_session = false,
-  max_path_length = 80,
-})
+}
 
 -- CMP
-vim.opt.completeopt = 'menu,menuone,noselect'
+local has_words_before = function()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+end
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+end
+
+-- vim.opt.completeopt = 'menu,menuone,noselect'
+vim.cmd 'set completeopt=menu,menuone,noselect'
 local cmp = require 'cmp'
 cmp.setup({
   snippet = { expand = function(args) vim.fn["vsnip#anonymous"](args.body) end },
@@ -253,14 +293,36 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<Esc>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() == 1 then
-        cmp.confirm({ select = true })
+      local copilot_keys = vim.fn["copilot#Accept"]("")
+      if cmp.visible() then
+        return cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+      elseif copilot_keys ~= "" then
+        vim.api.nvim_feedkeys(copilot_keys, "i", false)
       else
         fallback()
       end
-    end, { 'i', 's' }),
+    end),
+    ["<A-n>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      elseif vim.fn["vsnip#available"](1) == 1 then
+        feedkey("<Plug>(vsnip-expand-or-jump)", "")
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+      end
+    end, { "i", "s", "c", }),
+
+    ["<A-p>"] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+        feedkey("<Plug>(vsnip-jump-prev)", "")
+      end
+    end, { "i", "s" }),
   }),
 
   sources = { { name = "nvim_lsp" }, { name = "nvim_lua" }, { name = "buffer" }, { name = "path" }, { name = 'emoji' } },
@@ -293,30 +355,30 @@ cmp.setup.cmdline(':', {
   })
 })
 
-local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- LSP
 wk.register({
-  ['lh'] = { vim.diagnostic.open_float, "LSP hover" },
-  ['ll'] = { vim.diagnostic.goto_prev, "Last LSP message" },
-  ['lq'] = { vim.diagnostic.setloclist, "LSP messages" },
-}, { prefix = '<leader>' })
+  ['h'] = { vim.diagnostic.open_float, "LSP hover" },
+  ['l'] = { vim.diagnostic.goto_prev, "Last LSP message" },
+  ['q'] = { vim.diagnostic.setloclist, "LSP messages" },
+}, { prefix = '<leader>l' })
 
 local on_attach = function(_, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   wk.register({
-    ['gD'] = { vim.lsp.buf.declaration, "Go to the decleration" },
     ['gd'] = { vim.lsp.buf.definition, "Go to the definition" },
-    ['gh'] = { vim.lsp.buf.hover, "Show hover" },
-    ['gI'] = { vim.lsp.buf.implementation, "Show Impl." },
-    ['gS'] = { vim.lsp.buf.signature_help, "Show Signature" },
-    ['<leader>D'] = { vim.lsp.buf.type_definition, "Show Type" },
-    ['<leader>rn'] = { vim.lsp.buf.rename, "Rename" },
-    ['<leader>ca'] = { vim.lsp.buf.code_action, "Code Action" },
+    ['gD'] = { vim.lsp.buf.type_definition, "Show Type" },
     ['gr'] = { vim.lsp.buf.references, "References" },
+    ['gh'] = { vim.lsp.buf.hover, "Show hover" },
+    ['<F2>'] = { vim.lsp.buf.rename, "Rename" },
     ['<leader>f'] = { '<cmd>lua vim.lsp.buf.format({ async=true, timeout_ms=5000 })<CR>', "Format Document" },
+    -- ['gD'] = { vim.lsp.buf.declaration, "Go to the decleration" },
+    -- ['gI'] = { vim.lsp.buf.implementation, "Show Impl." },
+    -- ['gS'] = { vim.lsp.buf.signature_help, "Show Signature" },
+    -- ['<leader>ca'] = { vim.lsp.buf.code_action, "Code Action" },
   }, { buffer = bufnr })
 end
 
@@ -349,8 +411,11 @@ require('lspconfig')['pyright'].setup {
     config.settings.python.pythonPath = path
   end,
   capabilities = cmp_capabilities,
+  settings = {
+    python = { analysis = { typeCheckingMode = "off" } }
+  }
 }
-require('lspconfig')['sumneko_lua'].setup {
+require('lspconfig')['lua_ls'].setup {
   on_attach = on_attach,
   settings = {
     Lua = {
@@ -365,14 +430,20 @@ require('lspconfig')['sumneko_lua'].setup {
 -- null-ls
 local null_ls = require('null-ls')
 local sources = {
+  null_ls.builtins.diagnostics.mypy.with({
+    prefer_local = "./.venv/bin",
+    extra_args = { "--ignore-missing-imports"},-- "--follow-imports=silent" },
+    -- method = null_ls.methods.DIAGNOSTICS_ON_SAVE
+  }),
   null_ls.builtins.diagnostics.flake8.with({
     prefer_local = "./.venv/bin",
   }),
   null_ls.builtins.formatting.black.with({
     prefer_local = "./.venv/bin",
+    extra_args = { "--preview" },
   }),
 }
-null_ls.setup({ sources = sources })
+null_ls.setup({ sources = sources, diagnostics_format = "[#{c}] #{m} (#{s})", })
 
 -- telescope
 local telescope = require('telescope')
@@ -407,7 +478,13 @@ wk.register({
 })
 wk.register({
   o = { telescope_builtin.treesitter, 'Symbols in File' },
-  gs = { telescope_builtin.git_status, 'Git Status' },
+  p = { telescope_builtin.lsp_dynamic_workspace_symbols, 'Symbols in Workspace' },
+  r = { telescope_builtin.lsp_references, 'References' },
+  l = { telescope_builtin.diagnostics, 'LSP Diagnostics' },
+  gst = { telescope_builtin.git_status, 'Git Status' },
+  gc = { telescope_builtin.git_commits, 'Git Commits' },
+  gb = { telescope_builtin.git_branches, 'Git Branches' },
+  gsta = { telescope_builtin.git_stash, 'Git Stash' },
   f = { telescope_builtin.live_grep, 'Live Grep' },
   b = { telescope_builtin.buffers, 'Buffers' },
   h = { telescope_builtin.help_tags, 'Help Tags' },
@@ -471,56 +548,11 @@ require("bufferline").setup {
 wk.register({
   ['gt'] = { '<cmd>BufferLineCycleNext<CR>', "Next Buffer" },
   ['gT'] = { '<cmd>BufferLineCyclePrev<CR>', "Prev Buffer" },
+  ['<leader>bmt'] = { '<cmd>BufferLineMoveNext<CR>', "Move Buffer Forward" },
+  ['<leader>bmT'] = { '<cmd>BufferLineMovePrev<CR>', "Move Buffer Backward" },
   ['<leader>bd'] = { '<cmd>BufferLinePickClose<CR>', "Pick Close Buffer" },
   ['<leader>bp'] = { '<cmd>BufferLinePick<CR>', "Goto Buffer" },
 })
-
--- OneDark Theme
-
-require('onedark').setup {
-  style = 'warmer',
-  transparent = false,
-  term_colors = true,
-  ending_tildes = false,
-  cmp_itemkind_reverse = false,
-  code_style = {
-    comments = 'italic',
-    keywords = 'none',
-    functions = 'none',
-    strings = 'none',
-    variables = 'none'
-  },
-  diagnostics = {
-    darker = true,
-    undercurl = true,
-    background = true,
-  },
-}
-require('onedark').load()
-
--- Lualine
-require('lualine').setup {
-  options = {
-    theme = 'onedark',
-    disabled_filetypes = { 'NvimTree', 'gitcommit' },
-  },
-  sections = {
-    lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'filename' },
-    lualine_x = { dap.status, 'fileformat', 'filetype' },
-    lualine_y = { 'progress' },
-    lualine_z = { 'location' }
-  },
-  inactive_sections = {
-    lualine_a = {},
-    lualine_b = {},
-    lualine_c = { 'filename' },
-    lualine_x = { 'location' },
-    lualine_y = {},
-    lualine_z = {}
-  },
-}
 
 -- alpha
 local db = require('alpha.themes.dashboard')
@@ -589,13 +621,91 @@ vim.api.nvim_create_autocmd('User', {
     end
 
     if not found_non_empty_buffer then
-      require('nvim-tree').toggle(true, false)
+      -- require('nvim-tree').toggle(true, false)
       vim.cmd [[:Alpha]]
     end
   end,
 })
 
 wk.register({ ["<leader>c"] = { "<cmd>Bdelete<CR>", "Close buffer" }, })
+
+-- OneDark Theme
+
+require("onedarkpro").setup({
+  theme = "onedark", -- The default dark theme
+  plugins = {}, -- all are enabled
+  styles = { -- Choose from "bold,italic,underline"
+    --   types = "italic", -- Style that is applied to types
+    --   numbers = "NONE", -- Style that is applied to numbers
+    --   strings = "NONE", -- Style that is applied to strings
+    --   comments = "NONE", -- Style that is applied to comments
+    --   keywords = "NONE", -- Style that is applied to keywords
+    --   constants = "NONE", -- Style that is applied to constants
+    --   functions = "NONE", -- Style that is applied to functions
+    --   operators = "NONE", -- Style that is applied to operators
+    --   variables = "NONE", -- Style that is applied to variables
+    --   conditionals = "NONE", -- Style that is applied to conditionals
+    --   virtual_text = "NONE", -- Style that is applied to virtual text
+  },
+  options = {
+    bold = true, -- Use bold styles?
+    italic = true, -- Use italic styles?
+    underline = true, -- Use underline styles?
+    undercurl = true, -- Use undercurl styles?
+
+    cursorline = false, -- Use cursorline highlighting?
+    transparency = false, -- Use a transparent background?
+    terminal_colors = false, -- Use the theme's colors for Neovim's :terminal?
+    window_unfocused_color = false, -- When the window is out of focus, change the normal background?
+  }
+})
+
+-- require('onedark').setup {
+--   style = 'warmer',
+--   transparent = false,
+--   term_colors = true,
+--   ending_tildes = false,
+--   cmp_itemkind_reverse = false,
+--   code_style = {
+--     comments = 'italic',
+--     keywords = 'none',
+--     functions = 'none',
+--     strings = 'none',
+--     variables = 'none'
+--   },
+--   diagnostics = {
+--     darker = true,
+--     undercurl = true,
+--     background = true,
+--   },
+-- }
+-- require('onedark').load()
+vim.cmd('colorscheme onedark')
+
+-- Lualine
+require('lualine').setup {
+  options = {
+    theme = 'onedark',
+    disabled_filetypes = { 'NvimTree', 'gitcommit' },
+  },
+  sections = {
+    lualine_a = { 'mode' },
+    lualine_b = { 'branch', 'diff', 'diagnostics' },
+    lualine_c = { 'filename' },
+    lualine_x = { dap.status, 'fileformat', 'filetype' },
+    lualine_y = { 'progress' },
+    lualine_z = { 'location' }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = { 'filename' },
+    lualine_x = { 'location' },
+    lualine_y = {},
+    lualine_z = {}
+  },
+}
+
 
 -------- abbreviations
 
@@ -605,12 +715,14 @@ vim.cmd 'ab wday ###### Wednesday'
 
 -------- settings
 
-vim.opt.clipboard = 'unnamed'
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.shell = '/bin/zsh'
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.cmd 'set ignorecase smartcase'
+vim.cmd 'set colorcolumn=79'
+vim.cmd 'highlight ColorColumn ctermbg=lightgrey guibg=lightgrey'
 
 -- number toggling
 vim.cmd 'set number'
