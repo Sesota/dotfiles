@@ -6,38 +6,30 @@
 
 ### Quick install
 
+- change DOTFILESDIR in zshrc  # TODO make it as part of the script
 - run `./install.sh`
+- `chsh -s $(which zsh)`
+- run p10k
 
-### Install tmux
-#### Build prerequisites
-- ubuntu
-  `sudo apt-get install libevent-dev ncurses-dev build-essential bison pkg-config automake`
-- RHEL
-  `sudo yum -y install libevent-devel ncurses-devel gcc make bison pkg-config`
+#### General packages
+- proxychains
+- neovim
+- tmux
+- fzf
+- dnscrypt
+- chrome
+- make
+- zsh-theme-powerlevel10k-git
 
-#### Building
-- `git clone https://github.com/tmux/tmux.git`
-- `cd tmux && sh autogen.sh`
-- `./configure`
-- `make && sudo make install`
+#### settings
+- autostart:
+  - yakuake
+- enable aur/flatpak support on pamac
 
-### Install Neovim
-
-#### Build prerequisites
-
-- ubuntu
-  `sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen`
-- RHEL
-  `sudo yum -y install ninja-build libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl`
-
-#### Building
-- `git clone https://github.com/neovim/neovim`
-- `cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo`
-- ` sudo make install`
-- `cd .. && rm -rf neovim`
+#### neovim
+- Run `:PackerInstall`
 
 ## TODO
-
 ### `General`
 
 - ! unify the custom-dotfiles/.zshrc and .zshrc
@@ -58,18 +50,3 @@
 - breadcrumbs
 - git thingies
 - tmux italic alt
-
-### General packages
-- proxychains
-- neovim
-- tmux
-- fzf
-- dnscrypt
-- chrome
-
-### settings
-- autostart:
-  - yakuake
-- enable aur/flatpak support on pamac
-
-
