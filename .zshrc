@@ -1,5 +1,5 @@
 # RC variables
-DOTFILESDIR=$HOME/dotfiles-sepehr
+DOTFILESDIR=$HOME/dotfiles
 
 # Check if zplug is installed
 if [[ ! -d $HOME/.zplug ]]; then
