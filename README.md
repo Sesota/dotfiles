@@ -70,4 +70,6 @@
 ### settings
 - autostart:
   - yakuake
+- enable aur/flatpak support on pamac
+
 
