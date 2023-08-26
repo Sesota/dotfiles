@@ -59,3 +59,15 @@
 - git thingies
 - tmux italic alt
 
+### General packages
+- proxychains
+- neovim
+- tmux
+- fzf
+- dnscrypt
+- chrome
+
+### settings
+- autostart:
+  - yakuake
+
