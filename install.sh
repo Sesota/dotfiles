@@ -8,6 +8,7 @@ dotfiles=(
   .tmux.conf
   .zshrc
   .zsh_theme.sh
+  .proxychains/proxychains.conf
 )
 
 # Symlink all dotfiles listed above to the right spot

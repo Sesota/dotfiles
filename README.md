@@ -20,11 +20,24 @@
 - chrome
 - make
 - zsh-theme-powerlevel10k-git
+- visual-studo-code-bin
+- tailscale
+- geoip
+- telegram
+- Spotify
+- poetry
+- discord
+- steam
+- thunderbird
 
 #### settings
 - autostart:
   - yakuake
 - enable aur/flatpak support on pamac
+
+#### Files to share
+- passwords.json
+- .zhistory
 
 #### neovim
 - Run `:PackerInstall`
