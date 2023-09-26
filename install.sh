@@ -8,6 +8,7 @@ dotfiles=(
   .tmux.conf
   .zshrc
   .zsh_theme.sh
+  .fzf.zsh
   .proxychains/proxychains.conf
 )
 
@@ -15,5 +16,5 @@ dotfiles=(
 for dotfile in ${dotfiles[@]}; do
   rm -f $HOME/$dotfile
   mkdir -p $(dirname $HOME/$dotfile)
-  ln -sf $PWD/$dotfile $HOME/$dotfile
+  ln -f $PWD/$dotfile $HOME/$dotfile
 done

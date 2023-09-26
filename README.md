@@ -29,6 +29,12 @@
 - discord
 - steam
 - thunderbird
+- XDM
+- [Jetbrains Font](https://www.jetbrains.com/lp/mono/)
+- playerctl
+- docker
+- v2raya
+- ripgrep
 
 #### settings
 - autostart:

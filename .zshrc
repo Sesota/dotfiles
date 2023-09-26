@@ -99,6 +99,10 @@ act () {
   export $(grep -v '^#' ${1:-.env} | xargs -d '\n')
 }
 
+gpass () {
+  cat ~/gpass | wl-copy
+}
+
 # Auto active virtual environment with name of .venv
 function cd() {
   builtin cd "$@"

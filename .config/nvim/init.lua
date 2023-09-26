@@ -1,3 +1,8 @@
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.shell = '/bin/zsh'
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
 ----------- plugins
 -- _G.__luacache_config = {
 --   chunks = {
@@ -52,7 +57,7 @@ require('packer').startup(function(use)
   --     vim.cmd 'imap <silent><script><expr> <C-L> copilot#Accept()'
   --     vim.g.copilot_no_tab_map = true
   --     vim.g.copilot_tab_fallback = ""
-  --     vim.g["copilot_filetypes"] = { gitcommit = true }  -- TODO fix; broken for now. 
+  --     vim.g["copilot_filetypes"] = { gitcommit = true }  -- TODO fix; broken for now.
   --     vim.g.copilot_proxy = 'localhost:8118'
   --   end,
   -- }
@@ -293,16 +298,16 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<Esc>'] = cmp.mapping.abort(),
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      local copilot_keys = vim.fn["copilot#Accept"]("")
-      if cmp.visible() then
-        return cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
-      elseif copilot_keys ~= "" then
-        vim.api.nvim_feedkeys(copilot_keys, "i", false)
-      else
-        fallback()
-      end
-    end),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   local copilot_keys = vim.fn["copilot#Accept"]("")
+    --   if cmp.visible() then
+    --     return cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+    --   elseif copilot_keys ~= "" then
+    --     vim.api.nvim_feedkeys(copilot_keys, "i", false)
+    --   else
+    --     fallback()
+    --   end
+    -- end),
     ["<A-n>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
@@ -546,8 +551,8 @@ require("bufferline").setup {
   }
 }
 wk.register({
-  ['gt'] = { '<cmd>BufferLineCycleNext<CR>', "Next Buffer" },
-  ['gT'] = { '<cmd>BufferLineCyclePrev<CR>', "Prev Buffer" },
+  -- ['gt'] = { '<cmd>BufferLineCycleNext<CR>', "Next Buffer" },
+  -- ['gT'] = { '<cmd>BufferLineCyclePrev<CR>', "Prev Buffer" },
   ['<leader>bmt'] = { '<cmd>BufferLineMoveNext<CR>', "Move Buffer Forward" },
   ['<leader>bmT'] = { '<cmd>BufferLineMovePrev<CR>', "Move Buffer Backward" },
   ['<leader>bd'] = { '<cmd>BufferLinePickClose<CR>', "Pick Close Buffer" },
@@ -680,7 +685,12 @@ require("onedarkpro").setup({
 --   },
 -- }
 -- require('onedark').load()
+if not vim.g.vscode then
 vim.cmd('colorscheme onedark')
+else
+  vim.cmd.colorscheme = ""
+end
+-- vim.cmd('colorscheme onedark')
 
 -- Lualine
 require('lualine').setup {
@@ -715,11 +725,6 @@ vim.cmd 'ab wday ###### Wednesday'
 
 -------- settings
 
-vim.opt.clipboard = 'unnamedplus'
-vim.opt.shell = '/bin/zsh'
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
 vim.cmd 'set ignorecase smartcase'
 vim.cmd 'set colorcolumn=79'
 vim.cmd 'highlight ColorColumn ctermbg=lightgrey guibg=lightgrey'
