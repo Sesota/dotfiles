@@ -1,4 +1,5 @@
-vim.opt.clipboard = 'unnamedplus'
+-- vim.cmd 'set clipboard=unnamedplus'
+vim.opt.clipboard:append("unnamedplus")
 vim.opt.shell = '/bin/zsh'
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2

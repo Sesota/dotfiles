@@ -60,12 +60,13 @@ ZSH_CUSTOM="$HOME/.zsh"
 DISABLE_UPDATE_PROMPT=true
 DISABLE_AUTO_UPDATE=true
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-ZSH_THEME='af-magic'
+ZSH_THEME='powerlevel10k/powerlevel10k'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
 plugins=(
   git
   tmux
+  zsh-vi-mode
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -85,7 +86,7 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 # Aliases
 alias ssh="TERM=xterm-256color ssh"
 alias ll="ls -lha"
-alias v="nvim"
+alias v="vim"
 alias confedit="nvim $DOTFILESDIR"
 alias tm="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
 alias antlr4="antlr4-7"
@@ -93,6 +94,7 @@ alias antlr4-7="java -jar /usr/local/lib/antlr-4.7.2-complete.jar"
 alias antlr4-12="java -jar /usr/local/lib/antlr-4.12.0-complete.jar"
 alias grun="java org.antlr.v4.gui.TestRig"
 export CLASSPATH=".:/usr/local/lib/antlr-4.7.2-complete.jar:$CLASSPATH"
+alias pa="poetry add"
 
 act () {
   source ".venv/bin/activate"
@@ -141,6 +143,10 @@ function cd() {
 # Compilation flags
 
 export EDITOR='nvim'
+export LANGUAGE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
 
 # -----------------------------------------------------------------------------
 
