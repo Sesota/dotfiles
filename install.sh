@@ -19,7 +19,7 @@ for dotfile in ${dotfiles[@]}; do
   ln -f $PWD/$dotfile $HOME/$dotfile
 done
 
-apt install zsh
+apt install zsh fzf
 chsh -s $(which zsh)
 zsh
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
