@@ -18,3 +18,8 @@ for dotfile in ${dotfiles[@]}; do
   mkdir -p $(dirname $HOME/$dotfile)
   ln -f $PWD/$dotfile $HOME/$dotfile
 done
+
+apt install zsh
+chsh -s $(which zsh)
+zsh
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
