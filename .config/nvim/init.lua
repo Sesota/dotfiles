@@ -90,6 +90,7 @@ require('packer').startup(function(use)
   use { 'nvim-lualine/lualine.nvim' } -- statusbar
   use {
     "folke/which-key.nvim", -- keybindings manager
+    tag="v2.1.0",
     config = function()
       require("which-key").setup {}
     end
