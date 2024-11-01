@@ -26,9 +26,10 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt install -y neovim ripgrep
 
+mkdir luals
 wget https://github.com/LuaLS/lua-language-server/releases/download/3.12.0/lua-language-server-3.12.0-linux-x64.tar.gz
-mv lua-language-server-3.12.0-linux-x64.tar.gZ /tmp/luals
-tar xzf /tmp/luals
+mv lua-language-server-3.12.0-linux-x64.tar.gz luals
+tar xzf /luals/lua-language-server-3.12.0-linux-x64.tar.gz -C luals
 
 sudo apt-get install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
