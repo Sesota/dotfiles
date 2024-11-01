@@ -16,7 +16,7 @@ dotfiles=(
 for dotfile in ${dotfiles[@]}; do
   rm -f $HOME/$dotfile
   mkdir -p $(dirname $HOME/$dotfile)
-  ln -f $PWD/$dotfile $HOME/$dotfile
+  ln -sf $PWD/$dotfile $HOME/$dotfile
 done
 
 apt install zsh fzf
@@ -24,7 +24,7 @@ chsh -s $(which zsh)
 git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH_CUSTOM/plugins/zsh-vi-mode
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt install -y neovim ripgrep
+sudo apt install -y neovim ripgrep fd-find
 
 mkdir luals
 wget https://github.com/LuaLS/lua-language-server/releases/download/3.12.0/lua-language-server-3.12.0-linux-x64.tar.gz

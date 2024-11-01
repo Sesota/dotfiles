@@ -26,10 +26,10 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim' --package manager
+  use 'wbthomason/packer.nvim'   --package manager
   use 'lewis6991/impatient.nvim' -- plugin optimization
   use "folke/neodev.nvim"
-  use 'mfussenegger/nvim-dap' -- debugger
+  use 'mfussenegger/nvim-dap'    -- debugger
   use 'mfussenegger/nvim-dap-python'
   use 'nvim-neotest/nvim-nio'
   use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
@@ -42,7 +42,7 @@ require('packer').startup(function(use)
     end,
   }
   use 'williamboman/nvim-lsp-installer' -- lsp ls installer
-  use 'neovim/nvim-lspconfig' -- lsp
+  use 'neovim/nvim-lspconfig'           -- lsp
   use {
     "jose-elias-alvarez/null-ls.nvim",
     config = function()
@@ -65,11 +65,11 @@ require('packer').startup(function(use)
   -- }
   use 'famiu/bufdelete.nvim' -- a minimal plugin to provide a better buffer delete command
   use {
-    "goolord/alpha-nvim", -- greeter
+    "goolord/alpha-nvim",    -- greeter
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
 
-  use { 'nvim-treesitter/nvim-treesitter' } -- language parser
+  use { 'nvim-treesitter/nvim-treesitter' }                                               -- language parser
 
   use { 'akinsho/bufferline.nvim', tag = "*", requires = 'kyazdani42/nvim-web-devicons' } -- nice tabs instead of buffers
 
@@ -87,10 +87,10 @@ require('packer').startup(function(use)
     requires = { 'nvim-lua/plenary.nvim', }
   }
   use 'nvim-telescope/telescope-project.nvim' -- project manager plugin for telescope
-  use { 'nvim-lualine/lualine.nvim' } -- statusbar
+  use { 'nvim-lualine/lualine.nvim' }         -- statusbar
   use {
-    "folke/which-key.nvim", -- keybindings manager
-    tag="v2.1.0",
+    "folke/which-key.nvim",                   -- keybindings manager
+    tag = "v2.1.0",
     config = function()
       require("which-key").setup {}
     end
@@ -188,10 +188,10 @@ dap.configurations.python = {
     justMyCode = false,
   },
   {
-    name='Django (Attach)',
-    type='python',
-    request='attach',
-    port=5000,
+    name = 'Django (Attach)',
+    type = 'python',
+    request = 'attach',
+    port = 5000,
     justMyCode = false,
   },
 }
@@ -228,8 +228,8 @@ dapui.setup({
     -- }
   },
   floating = {
-    max_height = nil, -- These can be integers or a float between 0 and 1.
-    max_width = nil, -- Floats will be treated as percentage of your screen.
+    max_height = nil,  -- These can be integers or a float between 0 and 1.
+    max_width = nil,   -- Floats will be treated as percentage of your screen.
     border = "single", -- Border style. Can be "single", "double" or "rounded"
     mappings = {
       close = { "q", "<Esc>" },
@@ -440,7 +440,7 @@ local null_ls = require('null-ls')
 local sources = {
   null_ls.builtins.diagnostics.mypy.with({
     prefer_local = "./.venv/bin",
-    extra_args = { "--ignore-missing-imports"},-- "--follow-imports=silent" },
+    extra_args = { "--ignore-missing-imports" }, -- "--follow-imports=silent" },
     -- method = null_ls.methods.DIAGNOSTICS_ON_SAVE
   }),
   null_ls.builtins.diagnostics.flake8.with({
@@ -641,8 +641,8 @@ wk.register({ ["<leader>c"] = { "<cmd>Bdelete<CR>", "Close buffer" }, })
 
 require("onedarkpro").setup({
   theme = "onedark", -- The default dark theme
-  plugins = {}, -- all are enabled
-  styles = { -- Choose from "bold,italic,underline"
+  plugins = {},      -- all are enabled
+  styles = {         -- Choose from "bold,italic,underline"
     --   types = "italic", -- Style that is applied to types
     --   numbers = "NONE", -- Style that is applied to numbers
     --   strings = "NONE", -- Style that is applied to strings
@@ -656,14 +656,14 @@ require("onedarkpro").setup({
     --   virtual_text = "NONE", -- Style that is applied to virtual text
   },
   options = {
-    bold = true, -- Use bold styles?
-    italic = true, -- Use italic styles?
-    underline = true, -- Use underline styles?
-    undercurl = true, -- Use undercurl styles?
+    bold = true,                    -- Use bold styles?
+    italic = true,                  -- Use italic styles?
+    underline = true,               -- Use underline styles?
+    undercurl = true,               -- Use undercurl styles?
 
-    cursorline = false, -- Use cursorline highlighting?
-    transparency = false, -- Use a transparent background?
-    terminal_colors = false, -- Use the theme's colors for Neovim's :terminal?
+    cursorline = false,             -- Use cursorline highlighting?
+    transparency = false,           -- Use a transparent background?
+    terminal_colors = false,        -- Use the theme's colors for Neovim's :terminal?
     window_unfocused_color = false, -- When the window is out of focus, change the normal background?
   }
 })
@@ -689,7 +689,7 @@ require("onedarkpro").setup({
 -- }
 -- require('onedark').load()
 if not vim.g.vscode then
-vim.cmd('colorscheme onedark')
+  vim.cmd('colorscheme onedark')
 else
   vim.cmd.colorscheme = ""
 end
