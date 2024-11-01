@@ -31,7 +31,8 @@ require('packer').startup(function(use)
   use "folke/neodev.nvim"
   use 'mfussenegger/nvim-dap' -- debugger
   use 'mfussenegger/nvim-dap-python'
-  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+  use 'nvim-neotest/nvim-nio'
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } }
   use 'theHamsta/nvim-dap-virtual-text'
   use {
     'lewis6991/gitsigns.nvim', -- git gutter
@@ -70,7 +71,7 @@ require('packer').startup(function(use)
 
   use { 'nvim-treesitter/nvim-treesitter' } -- language parser
 
-  use { 'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons' } -- nice tabs instead of buffers
+  use { 'akinsho/bufferline.nvim', tag = "*", requires = 'kyazdani42/nvim-web-devicons' } -- nice tabs instead of buffers
 
   -- use 'navarasu/onedark.nvim' -- theme manager
   use "olimorris/onedarkpro.nvim"

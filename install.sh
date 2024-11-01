@@ -26,6 +26,10 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt install -y neovim ripgrep
 
+wget https://github.com/LuaLS/lua-language-server/releases/download/3.12.0/lua-language-server-3.12.0-linux-x64.tar.gz
+mv lua-language-server-3.12.0-linux-x64.tar.gZ /tmp/luals
+tar xzf /tmp/luals
+
 sudo apt-get install -y ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
