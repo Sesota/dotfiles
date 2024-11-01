@@ -47,7 +47,7 @@ compinit
 # -----------------------------------------------------------------------------
 # Tmux
 
-ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_AUTOSTART=false
 ZSH_TMUX_CONFIG=$DOTFILESDIR/.tmux.conf
 ZSH_TMUX_DEFAULT_SESSION_NAME=sesota
 
@@ -67,6 +67,8 @@ plugins=(
   git
   tmux
   zsh-vi-mode
+  kubectl
+  kube-ps1
 )
 source $ZSH/oh-my-zsh.sh
 
@@ -86,7 +88,7 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 # Aliases
 alias ssh="TERM=xterm-256color ssh"
 alias ll="ls -lha"
-alias v="vim"
+alias v="nvim"
 alias confedit="nvim $DOTFILESDIR"
 alias tm="tmux -L sepehr -f $DOTFILESDIR/.tmux.conf"
 alias antlr4="antlr4-7"
@@ -98,6 +100,10 @@ alias pa="poetry add"
 
 act () {
   source ".venv/bin/activate"
+  export $(grep -v '^#' ${1:-.env} | xargs -d '\n')
+}
+
+exp () {
   export $(grep -v '^#' ${1:-.env} | xargs -d '\n')
 }
 
@@ -176,3 +182,4 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH=$PATH:/usr/local/go/bin
