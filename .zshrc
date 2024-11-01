@@ -1,4 +1,6 @@
 # RC variables
+export LC_ALL=en_US.UTF-8 
+export LANG=en_US.UTF-8
 DOTFILESDIR=$HOME/dotfiles
 
 # Check if zplug is installed
@@ -183,5 +185,3 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH=$PATH:/usr/local/go/bin
-export LC_ALL=en_US.UTF-8 
-export LANG=en_US.UTF-8
