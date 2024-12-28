@@ -1,7 +1,8 @@
 # RC variables
-export LC_ALL=en_US.UTF-8 
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 DOTFILESDIR=$HOME/dotfiles
+ZSH_CUSTOM="$HOME/.zsh"
 
 # Check if zplug is installed
 if [[ ! -d $HOME/.zplug ]]; then
@@ -58,7 +59,6 @@ ZSH_TMUX_DEFAULT_SESSION_NAME=sesota
 # Oh-My-Zsh!
 export ZSH=$HOME/.zplug/repos/robbyrussell/oh-my-zsh
 
-ZSH_CUSTOM="$HOME/.zsh"
 DISABLE_UPDATE_PROMPT=true
 DISABLE_AUTO_UPDATE=true
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -67,7 +67,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
 plugins=(
   git
-  tmux
+  # tmux
   zsh-vi-mode
   kubectl
   kube-ps1
@@ -185,3 +185,4 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH=$PATH:/usr/local/go/bin:$DOTFILESDIR/luals/bin
+source /usr/share/nvm/init-nvm.sh

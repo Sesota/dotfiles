@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+ZSH_CUSTOM="$HOME/.zsh"
 
 set -e
 
